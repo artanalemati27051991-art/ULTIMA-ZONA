@@ -1,195 +1,47 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>ULTIMA-ZONA // Ultimate Survival</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>ULTIMA-ZONA // HQ Assault</title>
 <style>
-:root{--bg:#050b09;--panel:#0b1b15e8;--line:#345744;--text:#f2fff5;--muted:#a3b9aa;--green:#50f09a;--red:#ff6d78;--gold:#ffd36b;--blue:#77bfff}
-*{box-sizing:border-box}html,body{margin:0;overflow:hidden;background:#020504;color:var(--text);font-family:Inter,system-ui,Arial}canvas{display:block;width:100vw;height:100vh;touch-action:none}
-#hud{position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}
-.panel{background:var(--panel);border:1px solid #385d47;border-radius:15px;padding:10px 12px;box-shadow:0 8px 30px #0008;backdrop-filter:blur(10px)}.small{font-size:11px;color:var(--muted)}.big{font-size:17px;font-weight:850}.row{display:flex;gap:8px;align-items:center}.bar{height:7px;border-radius:99px;background:#173025;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;width:100%;background:var(--green)}
-#right{text-align:right;min-width:145px}#tools{position:fixed;top:112px;right:10px;display:flex;flex-direction:column;gap:6px}button{border:1px solid #466d54;background:#10291e;color:var(--text);border-radius:11px;padding:9px 11px;font-weight:750;box-shadow:0 5px 15px #0004}button:active{transform:scale(.97)}button.active{background:#2c7c4e;border-color:#8cf5b0}
-#bottom{position:fixed;left:0;right:0;bottom:0;padding:12px;display:flex;justify-content:space-between;align-items:end;pointer-events:none}#joy,#shoot{pointer-events:auto;touch-action:none;user-select:none}
-#joy{width:128px;height:128px;border:1px solid #416d53;background:#102b20aa;border-radius:50%;position:relative}#stick{position:absolute;left:35px;top:35px;width:58px;height:58px;border-radius:50%;background:#65b889aa;border:1px solid #9fe8bb}
-#shoot{width:118px;height:118px;border-radius:50%;font-size:40px;background:#642e37dd;border:2px solid #b25c66}
-#hint{position:fixed;bottom:4px;left:50%;transform:translateX(-50%);font-size:11px;color:#9db5a6;white-space:nowrap;pointer-events:none}
-#toast{position:fixed;top:95px;left:50%;transform:translateX(-50%);opacity:0;transition:.2s;background:#102c1eee;border:1px solid #4b8760;border-radius:99px;padding:9px 14px;white-space:nowrap;pointer-events:none}
-#modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#020604d9;padding:18px}#box{width:min(470px,100%);max-height:80vh;overflow:auto;background:#0a1d14;border:1px solid #4b7659;border-radius:20px;padding:18px;box-shadow:0 20px 80px #0009}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.card{padding:10px;border-radius:12px;background:#102b1e;border:1px solid #2c523c}.muted{color:var(--muted)}
+:root{--glass:#071521d9;--glass2:#102536ee;--line:#4e6f83;--txt:#f4fbff;--muted:#a7bac6;--cyan:#6be4ff;--gold:#ffd36a;--red:#ff5e63;--green:#73f59a}
+*{box-sizing:border-box}html,body{margin:0;overflow:hidden;background:#081018;color:var(--txt);font-family:Inter,system-ui,Arial}canvas{display:block;width:100vw;height:100vh;touch-action:none}
+.ui{position:fixed;z-index:5;pointer-events:none}.panel{background:linear-gradient(135deg,#081724ee,#0c1d2ae8);border:1px solid #5a778b;border-radius:9px;box-shadow:0 8px 30px #0009, inset 0 1px #ffffff12;backdrop-filter:blur(6px)}.click{pointer-events:auto;cursor:pointer}.small{font-size:11px;color:var(--muted)}.title{font-weight:900;letter-spacing:.5px}.gold{color:var(--gold)}.cyan{color:var(--cyan)}
+#top{left:8px;right:8px;top:8px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}#profile{width:300px;padding:7px;display:flex;gap:8px}.avatar{width:58px;height:58px;object-fit:cover;border:2px solid #b99a50;border-radius:5px;background:#203747}.statline{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.resourcebar{display:flex;gap:8px;align-items:center;justify-content:flex-end;padding:8px 12px;flex-wrap:wrap}.res{font-weight:850;white-space:nowrap}.res b{color:#d7e7ef}.icon{font-size:16px}
+#left{left:8px;top:90px;width:265px;display:flex;flex-direction:column;gap:8px}.mission{padding:10px}.mission h3{margin:0 0 7px;color:var(--gold);font-size:14px}.mission p{margin:7px 0;font-size:12px}.progress{height:5px;background:#193242;border-radius:8px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,#24b6ff,#6ce7ff)}
+#right{right:8px;top:92px;width:150px;display:flex;flex-direction:column;gap:8px}.sidebtn{padding:10px;text-align:center;font-weight:850;font-size:12px}.badge{position:absolute;top:-5px;right:-5px;background:#e73344;border:2px solid #0b1720;border-radius:50%;width:21px;height:21px;display:grid;place-items:center;font-size:11px}
+#bottom{left:8px;right:8px;bottom:8px;display:flex;align-items:end;justify-content:space-between;gap:8px}.joystick{width:118px;height:118px;border-radius:50%;border:1px solid #a4c4d2;background:#0b2030c9;display:grid;place-items:center;pointer-events:auto}.joystick .core{width:66px;height:66px;border-radius:50%;border:2px solid #75ffb1;background:#173f36;box-shadow:0 0 24px #31ff9a66;display:grid;place-items:center;font-size:28px}.actions{display:flex;gap:8px;align-items:end}.action{width:62px;height:62px;border-radius:14px;background:linear-gradient(#253b4b,#101c28);border:1px solid #7d9caf;color:white;font-size:24px;position:relative}.action.big{width:88px;height:88px;border-radius:50%;background:radial-gradient(circle,#ffb44c,#8c271a 70%);border:3px solid #f2bf67;font-size:36px;box-shadow:0 0 30px #ff6a2b66}.action:active{transform:scale(.95)}
+#chat{left:8px;bottom:10px;width:330px;padding:8px;font-size:12px;background:#07131de6}.chatline{margin:3px 0}.chatline b{color:#53d8ff}#selected{left:50%;bottom:8px;transform:translateX(-50%);width:min(470px,46vw);padding:10px;display:flex;gap:12px;align-items:center}.tankthumb{width:95px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #557687;background:#1a2c34}
+#toast{top:72px;left:50%;transform:translateX(-50%);padding:9px 14px;opacity:0;transition:.2s;color:#fff;white-space:nowrap}#start{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:#030a10e8}.startbox{width:min(430px,92vw);padding:24px;text-align:center}.startbox h1{font-size:34px;margin:0 0 8px;letter-spacing:2px}.startbox h1 span{color:var(--cyan)}.startbox p{color:var(--muted);line-height:1.6;font-size:13px}.startbox button{background:#15384b;border:1px solid #70dfff;color:white;border-radius:9px;padding:12px 20px;font-weight:900}
+@media(max-width:700px){#profile{width:210px}.avatar{width:42px;height:42px}#left{width:205px;top:84px}#right{width:112px;top:84px}.resourcebar{max-width:240px;font-size:10px}.mission{padding:7px}.mission p{font-size:10px}#chat{width:230px;font-size:10px}#selected{width:60vw;bottom:8px}.tankthumb{width:62px;height:42px}.title{font-size:12px}.small{font-size:9px}.sidebtn{padding:8px 4px;font-size:10px}}
 </style>
 </head>
 <body>
-<canvas id="c"></canvas>
-<div id="hud">
- <div class="panel"><div class="small">ULTIMA-ZONA // SURVIVAL</div><div class="big" id="phase">Giorno 1 · Onda 1</div><div class="bar"><i id="hpbar"></i></div><div class="small" id="hp">100 / 100 HP</div><div class="small" id="stamina">Stamina 100%</div></div>
- <div class="panel" id="right"><div class="small">SOPRAVVIVENZA</div><div class="big" id="score">0 eliminati</div><div class="small" id="lvl">Livello 1 · XP 0/100</div><div class="small" id="res">🪵0 · 🔩0 · 🧪0 · 💰0</div></div>
-</div>
-<div id="tools"><button id="mapBtn">🗺️ Mappa</button><button id="baseBtn">🏕️ Base</button><button id="bagBtn">🎒 Zaino</button><button id="weaponBtn">🔫 Arma</button></div>
-<div id="toast"></div>
-<div id="bottom"><div id="joy"><div id="stick"></div></div><button id="shoot">⚡</button></div>
-<div id="hint">Muovi con il joystick · mira automatica al nemico più vicino · raccogli le risorse</div>
-<div id="modal"><div id="box"><h2 id="mtitle"></h2><div id="mbody"></div><button id="close">Chiudi</button></div></div>
-<script>
-const cv=document.getElementById('c'),ctx=cv.getContext('2d');let W,H,dpr;
-function resize(){W=innerWidth;H=innerHeight;dpr=Math.min(devicePixelRatio||1,2);cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}addEventListener('resize',resize);resize();
-const S={day:1,wave:1,kills:0,level:1,xp:0,next:100,hp:100,maxHp:100,wood:0,metal:0,med:0,coins:0,damage:25,rate:310,weapon:1,base:1,spawn:0,last:0,gameOver:false,night:false,z:[],b:[],loot:[],structures:[]};
-const P={x:0,y:0,r:15,speed:2.7,angle:0,stamina:100};
-const keys={},joy={x:0,y:0,active:false};addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=1;if(e.key===' ')shoot()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=0);
-const joyEl=document.getElementById('joy'),stick=document.getElementById('stick');
-function moveJoy(e){const r=joyEl.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),m=Math.hypot(dx,dy)||1,max=r.width*.34;let x=dx,y=dy;if(m>max){x=x/m*max;y=y/m*max}joy.x=x/max;joy.y=y/max;stick.style.transform=`translate(${x}px,${y}px)`}
-joyEl.onpointerdown=e=>{joy.active=true;joyEl.setPointerCapture(e.pointerId);moveJoy(e)};joyEl.onpointermove=e=>{if(joy.active)moveJoy(e)};joyEl.onpointerup=()=>{joy.active=false;joy.x=joy.y=0;stick.style.transform='translate(0,0)'};
-document.getElementById('shoot').onpointerdown=shoot;
-function toast(t){const e=document.getElementById('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,1600)}
-function hud(){phase.textContent=`Giorno ${S.day} · Onda ${S.wave}${S.night?' · 🌙':''}`;hpbar.style.width=Math.max(0,S.hp/S.maxHp*100)+'%';hp.textContent=`${Math.ceil(S.hp)} / ${S.maxHp} HP`;stamina.textContent=`Stamina ${Math.round(P.stamina)}%`;score.textContent=S.kills+' eliminati';lvl.textContent=`Livello ${S.level} · XP ${S.xp}/${S.next}`;res.textContent=`🪵${S.wood} · 🔩${S.metal} · 🧪${S.med} · 💰${S.coins}`}
-function xp(n){S.xp+=n;while(S.xp>=S.next){S.xp-=S.next;S.level++;S.next=Math.round(S.next*1.32);S.maxHp+=10;S.hp=S.maxHp;S.damage+=5;toast('⬆️ Nuovo livello '+S.level)}hud()}
-function modal(t,b){mtitle.textContent=t;mbody.innerHTML=b;document.getElementById('modal').style.display='flex'}close.onclick=()=>modalEl().style.display='none';function modalEl(){return document.getElementById('modal')}
-function nearest(){let t=null,best=1e9;for(const z of S.z){let d=Math.hypot(z.x-P.x,z.y-P.y);if(d<best&&d<520){best=d;t=z}}return t}
-function shoot(){if(S.gameOver)return;let n=performance.now();if(n-S.last<S.rate)return;S.last=n;let t=nearest(),a=t?Math.atan2(t.y-P.y,t.x-P.x):P.angle;if(!t&&Math.abs(joy.x)+Math.abs(joy.y)>0)a=Math.atan2(joy.y,joy.x);P.angle=a;S.b.push({x:P.x,y:P.y,a,life:75,damage:S.damage})}
-function spawn(){let e=Math.floor(Math.random()*4),d=470,x,y;if(e===0){x=P.x-W/2-d;y=P.y+(Math.random()-.5)*H}else if(e===1){x=P.x+W/2+d;y=P.y+(Math.random()-.5)*H}else if(e===2){x=P.x+(Math.random()-.5)*W;y=P.y-H/2-d}else{x=P.x+(Math.random()-.5)*W;y=P.y+H/2+d}let elite=Math.random()<Math.min(.18,S.day*.02);S.z.push({x,y,r:elite?20:13+Math.random()*5,hp:(elite?160:48)+S.day*8,speed:(elite?.28:.42+Math.random()*.2),elite,hit:0})}
-function loot(x,y){if(Math.random()<.8)S.loot.push({x,y,t:Math.random()<.5?'wood':'metal'});if(Math.random()<.14)S.loot.push({x:x+9,y:y+5,t:'med'});if(Math.random()<.12)S.loot.push({x:x-8,y:y-4,t:'coin'})}
-function hurt(n){S.hp-=n;if(S.hp<=0){S.hp=0;S.gameOver=true;modal('☠️ Fine della spedizione',`Hai eliminato <b>${S.kills}</b> zombie e raggiunto il livello <b>${S.level}</b>.<br><br><button onclick="location.reload()">Ricomincia</button>`)}}
-function collect(){for(let i=S.loot.length-1;i>=0;i--){let l=S.loot[i];if(Math.hypot(l.x-P.x,l.y-P.y)<30){if(l.t==='wood')S.wood+=5;if(l.t==='metal')S.metal+=3;if(l.t==='med')S.med++;if(l.t==='coin')S.coins++;S.loot.splice(i,1);hud()}}}
-function update(dt){if(S.gameOver)return;let mx=joy.x,my=joy.y;if(keys.w||keys.arrowup)my-=1;if(keys.s||keys.arrowdown)my+=1;if(keys.a||keys.arrowleft)mx-=1;if(keys.d||keys.arrowright)mx+=1;let m=Math.hypot(mx,my)||1;if(Math.abs(mx)+Math.abs(my)>0){P.x+=mx/m*P.speed*dt;P.y+=my/m*P.speed*dt;P.angle=Math.atan2(my,mx);P.stamina=Math.max(0,P.stamina-.35*dt)}else P.stamina=Math.min(100,P.stamina+.6*dt);collect();S.spawn-=dt;if(S.spawn<=0){spawn();S.spawn=Math.max(12,62-S.wave*3-S.day*1.5)}
-for(let i=S.z.length-1;i>=0;i--){let z=S.z[i],dx=P.x-z.x,dy=P.y-z.y,d=Math.hypot(dx,dy)||1;z.x+=dx/d*z.speed*dt;z.y+=dy/d*z.speed*dt;if(d<z.r+P.r){z.hit-=dt;if(z.hit<=0){hurt(z.elite?10:4+S.day*.4);z.hit=45}}}
-for(let i=S.b.length-1;i>=0;i--){let b=S.b[i];b.x+=Math.cos(b.a)*8.5*dt;b.y+=Math.sin(b.a)*8.5*dt;b.life-=dt;let gone=b.life<=0;for(let j=S.z.length-1;j>=0&&!gone;j--){let z=S.z[j];if(Math.hypot(z.x-b.x,z.y-b.y)<z.r+5){z.hp-=b.damage;gone=true;if(z.hp<=0){S.kills++;xp(z.elite?70:25);loot(z.x,z.y);S.z.splice(j,1);if(S.kills%12===0){S.wave++;if(S.wave>4){S.wave=1;S.day++;S.night=!S.night;toast('🌅 Nuovo giorno: '+S.day)}}}}}if(gone)S.b.splice(i,1)}hud()}
-function w2s(x,y){return[x-P.x+W/2,y-P.y+H/2]}
-function circle(x,y,r,fill,stroke){let[sx,sy]=w2s(x,y);if(sx<-r||sy<-r||sx>W+r||sy>H+r)return;ctx.beginPath();ctx.arc(sx,sy,r,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}}
-function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle=S.night?'#040b0c':'#071611';ctx.fillRect(0,0,W,H);let g=48,ox=((W/2-P.x)%g+g)%g,oy=((H/2-P.y)%g+g)%g;ctx.strokeStyle=S.night?'#10252b':'#123226';for(let x=ox;x<W;x+=g){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}for(let y=oy;y<H;y+=g){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
-for(let a=-2;a<=2;a++)for(let b=-2;b<=2;b++){let x=Math.round(P.x/520)*520+a*520,y=Math.round(P.y/520)*520+b*520;circle(x,y,105,'#153d2b','#2b6848');circle(x,y,62,'#1e5039','#397a55')}
-for(const l of S.loot){circle(l.x,l.y,9,l.t==='wood'?'#c78b4d':l.t==='metal'?'#a7bcc5':l.t==='med'?'#e16e7c':'#f4cf65');let[sx,sy]=w2s(l.x,l.y);ctx.font='12px system-ui';ctx.fillStyle='#fff';ctx.fillText(l.t==='wood'?'🪵':l.t==='metal'?'🔩':l.t==='med'?'🧪':'💰',sx-8,sy-13)}
-for(const b of S.b)circle(b.x,b.y,4,'#ffd36b');
-for(const z of S.z){circle(z.x,z.y,z.r,z.elite?'#b65b31':'#8d454e',z.elite?'#ffbe65':'#d66a74');let[sx,sy]=w2s(z.x,z.y);ctx.fillStyle='#132016';ctx.fillRect(sx-17,sy-z.r-10,34,4);ctx.fillStyle='#63df88';ctx.fillRect(sx-17,sy-z.r-10,34*Math.max(0,z.hp/(z.elite?160:48+S.day*8)),4)}
-let[sx,sy]=w2s(P.x,P.y);ctx.beginPath();ctx.arc(sx,sy,P.r,0,Math.PI*2);ctx.fillStyle='#e1f4e7';ctx.fill();ctx.strokeStyle='#6be69b';ctx.stroke();ctx.save();ctx.translate(sx,sy);ctx.rotate(P.angle);ctx.fillStyle='#50f09a';ctx.fillRect(0,-5,25,10);ctx.restore();if(S.night){ctx.fillStyle='#00110acc';ctx.fillRect(0,0,W,H);circle(P.x,P.y,150,'#00000000','#274b3b')}}
-function upgradeBase(){let w=S.base*30,m=S.base*18;if(S.wood>=w&&S.metal>=m){S.wood-=w;S.metal-=m;S.base++;S.maxHp+=30;S.hp=S.maxHp;toast('🏕️ Base potenziata');hud();modalEl().style.display='none'}else toast('Risorse insufficienti')}
-function upgradeWeapon(){let c=S.weapon*55;if(S.metal>=c){S.metal-=c;S.weapon++;S.damage+=14;S.rate=Math.max(125,S.rate-35);toast('🔫 Arma migliorata');hud();modalEl().style.display='none'}else toast('Metallo insufficiente')}
-function useMed(){if(S.med>0&&S.hp<S.maxHp){S.med--;S.hp=Math.min(S.maxHp,S.hp+40);hud();modalEl().style.display='none'}else toast('Nessun medkit o salute già piena')}
-mapBtn.onclick=()=>modal('🗺️ Mappa',`<p>Sei nel settore <b>${Math.floor(P.x/520)}, ${Math.floor(P.y/520)}</b>.</p><p>Le zone verdi rappresentano aree esplorabili. Il mondo è generato dinamicamente mentre ti muovi.</p><div class="card">Obiettivo: sopravvivi, raccogli risorse e potenzia la base.</div>`);
-baseBtn.onclick=()=>modal('🏕️ Base',`<p>Livello base: <b>${S.base}</b></p><div class="grid"><div class="card">🪵 Legno<br><b>${S.wood}</b></div><div class="card">🔩 Metallo<br><b>${S.metal}</b></div></div><p>Potenzia la salute massima e prepara il rifugio.</p><button onclick="upgradeBase()">Potenzia · ${S.base*30} legno / ${S.base*18} metallo</button>`);
-bagBtn.onclick=()=>modal('🎒 Zaino',`<div class="grid"><div class="card">🪵 Legno<br><b>${S.wood}</b></div><div class="card">🔩 Metallo<br><b>${S.metal}</b></div><div class="card">🧪 Medkit<br><b>${S.med}</b></div><div class="card">💰 Monete<br><b>${S.coins}</b></div></div><button onclick="useMed()">Usa medkit (+40 HP)</button>`);
-weaponBtn.onclick=()=>modal('🔫 Arma',`<p>Livello arma: <b>${S.weapon}</b></p><p>Danno: ${S.damage} · Cadenza: ${S.rate} ms</p><button onclick="upgradeWeapon()">Migliora · ${S.weapon*55} metallo</button>`);
-let last=performance.now();function loop(t){let dt=Math.min(2.5,(t-last)/16.67);last=t;update(dt);draw();requestAnimationFrame(loop)}requestAnimationFrame(loop);hud();
-</script>
-</body></html>
-from pathlib import Path
-
-GAME = r'''<style>
-:root{--bg:#050b09;--panel:#0b1b15e8;--line:#345744;--text:#f2fff5;--muted:#a3b9aa;--green:#50f09a;--red:#ff6d78;--gold:#ffd36b;--blue:#77bfff}
-*{box-sizing:border-box}html,body{margin:0;overflow:hidden;background:#020504;color:var(--text);font-family:Inter,system-ui,Arial}canvas{display:block;width:100vw;height:100vh;touch-action:none}
-#hud{position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:8px;pointer-events:none;z-index:4}
-.panel{background:var(--panel);border:1px solid #385d47;border-radius:15px;padding:10px 12px;box-shadow:0 8px 30px #0008;backdrop-filter:blur(10px)}.small{font-size:11px;color:var(--muted)}.big{font-size:17px;font-weight:850}.bar{height:7px;border-radius:99px;background:#173025;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;width:100%;background:var(--green)}.bar.xp i{background:var(--gold)}
-#right{text-align:right;min-width:150px}
-#tools{position:fixed;top:112px;right:10px;display:flex;flex-direction:column;gap:6px;z-index:4}
-button{border:1px solid #466d54;background:#10291e;color:var(--text);border-radius:11px;padding:9px 11px;font-weight:750;box-shadow:0 5px 15px #0004}button:active{transform:scale(.97)}
-#bottom{position:fixed;left:0;right:0;bottom:0;padding:12px;display:flex;justify-content:space-between;align-items:end;pointer-events:none;z-index:4}
-#joy,#shoot,#bombBtn{pointer-events:auto;touch-action:none;user-select:none}
-#joy{width:128px;height:128px;border:1px solid #416d53;background:#102b20aa;border-radius:50%;position:relative}
-#stick{position:absolute;left:35px;top:35px;width:58px;height:58px;border-radius:50%;background:#65b889aa;border:1px solid #9fe8bb}
-#atkzone{display:flex;gap:10px;align-items:end}
-#shoot{width:118px;height:118px;border-radius:50%;font-size:40px;background:#642e37dd;border:2px solid #b25c66}
-#bombBtn{width:64px;height:64px;border-radius:50%;font-size:26px;background:#3a3410dd;border:2px solid #d8b545}
-#hint{position:fixed;bottom:4px;left:50%;transform:translateX(-50%);font-size:11px;color:#9db5a6;white-space:nowrap;pointer-events:none;z-index:4}
-#toast{position:fixed;top:95px;left:50%;transform:translateX(-50%);opacity:0;transition:.2s;background:#102c1eee;border:1px solid #4b8760;border-radius:99px;padding:9px 14px;white-space:nowrap;pointer-events:none;z-index:6}
-#modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#020604d9;padding:18px;z-index:10}#box{width:min(470px,100%);max-height:80vh;overflow:auto;background:#0a1d14;border:1px solid #4b7659;border-radius:20px;padding:18px;box-shadow:0 20px 80px #0009}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.card{padding:10px;border-radius:12px;background:#102b1e;border:1px solid #2c523c}.muted{color:var(--muted)}
-#start{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 28%,#0d2f1f,#020604 78%);z-index:20;padding:18px}#startbox{text-align:center;max-width:460px}#startbox h1{font-size:36px;margin:0 0 8px;letter-spacing:2px}#startbox h1 span{color:var(--green)}#startbox p{color:var(--muted);font-size:13px;line-height:1.65}
-h2{margin:0 0 12px}
-</style>
-<canvas id="c"></canvas>
-<div id="hud">
- <div class="panel"><div class="small">ULTIMA-ZONA // SURVIVAL v2</div><div class="big" id="phase">Giorno 1 · Onda 1</div><div class="bar"><i id="hpbar"></i></div><div class="small" id="hp">100 / 100 HP</div><div class="small" id="stamina">Stamina 100%</div></div>
- <div class="panel" id="right"><div class="small">SOPRAVVIVENZA</div><div class="big" id="score">0 eliminati</div><div class="bar xp"><i id="xpbar"></i></div><div class="small" id="lvl">Livello 1 · XP 0/100</div><div class="small" id="res">🪵0 · 🔩0 · 🧪0 · 💣0 · 💰0</div></div>
-</div>
-<div id="tools"><button id="mapBtn">🗺️ Mappa</button><button id="baseBtn">🏕️ Base</button><button id="bagBtn">🎒 Zaino</button><button id="weaponBtn">🔫 Arma</button><button id="pauseBtn">⏸️ Pausa</button><button id="muteBtn">🔊</button></div>
-<div id="toast"></div>
-<div id="bottom"><div id="joy"><div id="stick"></div></div><div id="atkzone"><button id="bombBtn">💣</button><button id="shoot">⚡</button></div></div>
-<div id="hint">Joystick / WASD · tieni premuto ⚡ per fuoco continuo · SHIFT = corsa · 💣 bomba</div>
-<div id="modal"><div id="box"><h2 id="mtitle"></h2><div id="mbody"></div><button id="close">Chiudi</button></div></div>
-<div id="start"><div id="startbox"><h1>ULTIMA<span>-ZONA</span></h1><p>Survival 2D: elimina zombie 👾, raccogli risorse 🪵🔩, crafta bombe 💣 e sconfiggi il BOSS 👹 ogni 5 ondate.<br>Salvataggio automatico · audio sintetizzato · ciclo giorno/notte.</p><div id="startBtns" class="grid" style="margin-top:14px"></div></div></div>
+<canvas id="game"></canvas>
+<div id="top" class="ui"><div id="profile" class="panel"><img class="avatar" src="assets/map-hq.png"><div><div class="small">🇮🇹 ULTIMA-ZONA <span class="gold">VIP 5</span></div><div class="title">Comandante Artan</div><div class="statline"><span class="small">Lv. <b>32</b></span><span class="small">Potenza <b class="gold" id="power">2.847.620</b></span></div><div class="progress"><i style="width:62%"></i></div></div></div><div class="panel resourcebar"><span class="res">🪵 <b>1.2M</b></span><span class="res">🔩 <b>980K</b></span><span class="res">💧 <b>654K</b></span><span class="res">🔫 <b>320K</b></span><span class="res">💵 <b>48.560</b></span><span class="res">💎 <b>12.480</b> ➕</span></div></div>
+<div id="left" class="ui"><div class="panel mission"><h3>Missioni Principali ›</h3><p>Potenzia il quartier generale al livello 21<br><b>20/21</b></p><div class="progress"><i style="width:95%"></i></div></div><div class="panel mission"><h3>Missioni Giornaliero ›</h3><p class="cyan">Raccogli risorse <b id="rprog">3/5</b></p><p class="cyan">Elimina zombie <b id="zprog">142/200</b></p><p class="cyan">Completa 1 ricerca <b>0/1</b></p></div></div>
+<div id="right" class="ui"><div class="panel sidebtn click">🎁 Offerta speciale<div class="small">15:14:12</div></div><div class="panel sidebtn click">🏆 Eventi <span class="badge">3</span></div><div class="panel sidebtn click">📜 Missioni <span class="badge">5</span></div><div class="panel sidebtn click">👑 Centro eventi</div><div class="panel sidebtn click">🗺️ Mappa</div><div class="panel sidebtn click">🎒 Zaino <span class="badge">3</span></div><div class="panel sidebtn click">🛠️ Costruisci <span class="badge">5</span></div></div>
+<div id="chat" class="ui panel"><div class="chatline"><b>[ITA]Rider:</b> Cerco alleati attivi!</div><div class="chatline"><b>[ITA]Killa:</b> Attacco al boss tra 3 ore!</div><div class="chatline"><b>[USA]Shadow:</b> Gioco top, consigliato!</div></div>
+<div id="selected" class="ui panel"><img class="tankthumb" src="assets/map-hq.png"><div><div class="title">Carro Armato M1A2</div><div class="small">Attacco <b>320-450</b> · Salute <b id="tankhp">4800/4800</b></div><div class="progress"><i id="tankbar" style="width:100%"></i></div></div><button class="click" id="attackBtn">VAI</button></div>
+<div id="bottom" class="ui"><div class="joystick" id="joy"><div class="core">🛡️</div></div><div class="actions"><button class="action click" id="bomb">💣</button><button class="action click" id="med">🩹</button><button class="action click" id="grenade">🔫</button><button class="action big click" id="fire">💥</button></div></div>
+<div id="toast" class="ui panel"></div>
+<div id="start"><div class="startbox panel"><h1>ULTIMA<span>-ZONA</span></h1><p>HQ tattico, tank corazzati, edifici interattivi e assalto zombie. Questa build usa una scena 2D cinematografica come riferimento visivo e aggiunge comandi giocabili sopra la mappa.</p><button id="startBtn" class="click">AVVIA COMANDO</button></div></div>
 <script>
 const $=id=>document.getElementById(id);
-const cv=$('c'),ctx=cv.getContext('2d');let W,H,dpr;
-function resize(){W=innerWidth;H=innerHeight;dpr=Math.min(devicePixelRatio||1,2);cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}addEventListener('resize',resize);resize();
-const phase=$('phase'),hpbar=$('hpbar'),hpEl=$('hp'),stamEl=$('stamina'),scoreEl=$('score'),xpbar=$('xpbar'),lvlEl=$('lvl'),resEl=$('res'),mtitle=$('mtitle'),mbody=$('mbody'),modalEl=$('modal'),toastEl=$('toast');
-const DEF={day:1,wave:1,kills:0,level:1,xp:0,next:100,hp:100,maxHp:100,wood:0,metal:0,med:0,band:0,bombs:1,coins:0,damage:25,rate:310,weapon:1,base:1};
-let S={...DEF,hurtFlash:0,shake:0,spawn:0,last:0,gameOver:false,night:false,paused:false,started:false,z:[],b:[],nades:[],loot:[],particles:[]};
-const P={x:0,y:0,r:15,speed:2.7,angle:0,stamina:100};
-let firing=false,muted=false;
-/* ---------- AUDIO (WebAudio sintetizzato) ---------- */
-let AC=null;
-function ac(){if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC}
-function beep(f,d,type,v,slide){if(muted)return;try{const a=ac(),o=a.createOscillator(),g=a.createGain();o.type=type||'square';o.frequency.setValueAtTime(f,a.currentTime);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(40,f+slide),a.currentTime+d);g.gain.setValueAtTime(v||.1,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+d);o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+d)}catch(e){}}
-function noiseSfx(d,v){if(muted)return;try{const a=ac(),len=Math.floor(a.sampleRate*d),buf=a.createBuffer(1,len,a.sampleRate),ch=buf.getChannelData(0);for(let i=0;i<len;i++)ch[i]=(Math.random()*2-1)*(1-i/len);const n=a.createBufferSource(),g=a.createGain();g.gain.value=v;n.buffer=buf;n.connect(g);g.connect(a.destination);n.start()}catch(e){}}
-const sfx={shoot:()=>beep(520,.07,'square',.05,-280),hit:()=>beep(190,.05,'sawtooth',.05),pickup:()=>beep(660,.09,'sine',.09,220),level:()=>{beep(440,.12,'sine',.11);setTimeout(()=>beep(660,.12,'sine',.11),110);setTimeout(()=>beep(880,.22,'sine',.11),230)},hurt:()=>beep(120,.18,'sawtooth',.13,-60),boom:()=>{noiseSfx(.45,.3);beep(70,.35,'sine',.2,-30)},boss:()=>{beep(85,.5,'sawtooth',.18,-35);noiseSfx(.4,.15)}};
-/* ---------- SALVATAGGIO ---------- */
-const SAVE_KEY='ultimazona_v2';
-function save(){if(!S.started||S.gameOver)return;try{const d={...S,z:[],b:[],nades:[],particles:[],loot:S.loot.slice(0,80)};localStorage.setItem(SAVE_KEY,JSON.stringify({S:d,P:{x:P.x,y:P.y}}))}catch(e){}}
-function load(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw)return null;const d=JSON.parse(raw);return d&&d.S?d:null}catch(e){return null}}
-setInterval(save,10000);addEventListener('beforeunload',save);document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});
-/* ---------- INPUT ---------- */
-const keys={},joy={x:0,y:0,active:false};
-addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(k===' '||k.startsWith('arrow'))e.preventDefault();keys[k]=1;if(k===' '){firing=true;shoot()}});
-addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=0;if(e.key===' ')firing=false});
-document.addEventListener('contextmenu',e=>e.preventDefault());
-document.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
-const joyEl=$('joy'),stick=$('stick');
-function moveJoy(e){const r=joyEl.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),m=Math.hypot(dx,dy)||1,max=r.width*.34;let x=dx,y=dy;if(m>max){x=x/m*max;y=y/m*max}joy.x=x/max;joy.y=y/max;stick.style.transform='translate('+x+'px,'+y+'px)'}
-joyEl.onpointerdown=e=>{joy.active=true;joyEl.setPointerCapture(e.pointerId);moveJoy(e)};joyEl.onpointermove=e=>{if(joy.active)moveJoy(e)};joyEl.onpointerup=()=>{joy.active=false;joy.x=joy.y=0;stick.style.transform='translate(0,0)'};
-const shootEl=$('shoot');
-shootEl.onpointerdown=e=>{e.preventDefault();firing=true;shoot()};
-shootEl.onpointerup=shootEl.onpointercancel=()=>firing=false;
-$('bombBtn').onpointerdown=e=>{e.preventDefault();throwBomb()};
-/* ---------- UI ---------- */
-function toast(t){toastEl.textContent=t;toastEl.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>toastEl.style.opacity=0,1700)}
-function hud(){phase.textContent='Giorno '+S.day+' · Onda '+S.wave+(S.night?' · 🌙':'');hpbar.style.width=Math.max(0,S.hp/S.maxHp*100)+'%';hpEl.textContent=Math.ceil(S.hp)+' / '+S.maxHp+' HP';stamEl.textContent='Stamina '+Math.round(P.stamina)+'%';scoreEl.textContent=S.kills+' eliminati';xpbar.style.width=Math.min(100,S.xp/S.next*100)+'%';lvlEl.textContent='Livello '+S.level+' · XP '+S.xp+'/'+S.next;resEl.textContent='🪵'+S.wood+' · 🔩'+S.metal+' · 🧪'+S.med+' · 💣'+S.bombs+' · 💰'+S.coins}
-function xp(n){S.xp+=n;while(S.xp>=S.next){S.xp-=S.next;S.level++;S.next=Math.round(S.next*1.32);S.maxHp+=10;S.hp=S.maxHp;S.damage+=5;toast('⬆️ Nuovo livello '+S.level);sfx.level()}hud()}
-function modal(t,b,opt){opt=opt||{};if(opt.pause!==false&&!S.gameOver)S.paused=true;mtitle.textContent=t;mbody.innerHTML=b;modalEl.style.display='flex'}
-function closeModal(){modalEl.style.display='none';if(!S.gameOver)S.paused=false}
-$('close').onclick=closeModal;
-/* ---------- GAMEPLAY ---------- */
-function nearest(){let t=null,best=1e9;for(const z of S.z){let d=Math.hypot(z.x-P.x,z.y-P.y);if(d<best&&d<520){best=d;t=z}}return t}
-function shoot(){if(S.gameOver||S.paused||!S.started)return;let n=performance.now();if(n-S.last<S.rate)return;S.last=n;let t=nearest(),a=t?Math.atan2(t.y-P.y,t.x-P.x):P.angle;if(!t&&(Math.abs(joy.x)+Math.abs(joy.y)>0))a=Math.atan2(joy.y,joy.x);P.angle=a;S.b.push({x:P.x+Math.cos(a)*20,y:P.y+Math.sin(a)*20,a:a,life:75,damage:S.damage});sfx.shoot();S.particles.push({x:P.x+Math.cos(a)*26,y:P.y+Math.sin(a)*26,vx:Math.cos(a)*2,vy:Math.sin(a)*2,life:8,color:'#ffd36b',size:2})}
-function spawn(){let e=Math.floor(Math.random()*4),d=470,x,y;if(e===0){x=P.x-W/2-d;y=P.y+(Math.random()-.5)*H}else if(e===1){x=P.x+W/2+d;y=P.y+(Math.random()-.5)*H}else if(e===2){x=P.x+(Math.random()-.5)*W;y=P.y-H/2-d}else{x=P.x+(Math.random()-.5)*W;y=P.y+H/2+d}let elite=Math.random()<Math.min(.18,S.day*.02),hp=(elite?160:48)+S.day*8;S.z.push({x:x,y:y,r:elite?20:13+Math.random()*5,hp:hp,maxHp:hp,speed:elite?.28:.42+Math.random()*.2,elite:elite,boss:false,hit:0})}
-function spawnBoss(){const a=Math.random()*6.283,d=Math.max(W,H)/2+140,hp=600+S.day*140;S.z.push({x:P.x+Math.cos(a)*d,y:P.y+Math.sin(a)*d,r:34,hp:hp,maxHp:hp,speed:.36,elite:false,boss:true,hit:0});toast('👹 UN BOSS SI AVVICINA!');sfx.boss()}
-function loot(x,y){if(Math.random()<.8)S.loot.push({x:x,y:y,t:Math.random()<.5?'wood':'metal'});if(Math.random()<.14)S.loot.push({x:x+9,y:y+5,t:'med'});if(Math.random()<.12)S.loot.push({x:x-8,y:y-4,t:'coin'})}
-function killZombie(j,z){S.kills++;xp(z.boss?500:z.elite?70:25);loot(z.x,z.y);if(z.boss){S.coins+=20;S.shake=10;for(let i=0;i<6;i++)S.loot.push({x:z.x+(Math.random()-.5)*80,y:z.y+(Math.random()-.5)*80,t:i<3?'coin':i===3?'med':'metal'});toast('🏆 BOSS eliminato! +20 💰')}S.z.splice(j,1)}
-function hurt(n){if(S.gameOver)return;S.hp-=n;S.hurtFlash=10;sfx.hurt();if(S.hp<=0){S.hp=0;S.gameOver=true;try{localStorage.removeItem(SAVE_KEY)}catch(e){}modal('☠️ Fine della spedizione','Hai eliminato <b>'+S.kills+'</b> zombie, raggiunto il livello <b>'+S.level+'</b> e il giorno <b>'+S.day+'</b>.<br><br><button onclick="location.reload()">Ricomincia</button>',{pause:false})}}
-function explode(x,y){sfx.boom();S.shake=16;for(let i=0;i<28;i++){const a=Math.random()*6.283,s=1+Math.random()*4.5;S.particles.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:25+Math.random()*22,color:['#ffd36b','#ff9d5c','#ff6d78'][i%3],size:2+Math.random()*3})}for(let i=S.z.length-1;i>=0;i--){const z=S.z[i];if(Math.hypot(z.x-x,z.y-y)<130+z.r){z.hp-=140;if(z.hp<=0)killZombie(i,z)}}}
-function throwBomb(){if(S.gameOver||S.paused||!S.started)return;if(S.bombs<=0){toast('💣 Niente bombe: craftane dal 🎒 Zaino');return}S.bombs--;hud();let t=nearest(),a=t?Math.atan2(t.y-P.y,t.x-P.x):P.angle;S.nades.push({x:P.x+Math.cos(a)*18,y:P.y+Math.sin(a)*18,a:a,t:75});beep(300,.12,'square',.08,120);toast('💣 Bomba lanciata!')}
-function collect(){for(let i=S.loot.length-1;i>=0;i--){let l=S.loot[i];if(Math.hypot(l.x-P.x,l.y-P.y)<32){if(l.t==='wood')S.wood+=5;if(l.t==='metal')S.metal+=3;if(l.t==='med')S.med++;if(l.t==='coin')S.coins++;sfx.pickup();for(let k=0;k<5;k++)S.particles.push({x:l.x,y:l.y,vx:(Math.random()-.5)*2.5,vy:(Math.random()-.5)*2.5,life:14,color:'#8cf5b0',size:2});S.loot.splice(i,1);hud()}}}
-function update(dt){if(S.gameOver||S.paused||!S.started)return;
-if(firing)shoot();
-let mx=joy.x,my=joy.y;if(keys['w']||keys['arrowup'])my-=1;if(keys['s']||keys['arrowdown'])my+=1;if(keys['a']||keys['arrowleft'])mx-=1;if(keys['d']||keys['arrowright'])mx+=1;
-let m=Math.hypot(mx,my)||1;
-if(Math.abs(mx)+Math.abs(my)>0){const sprint=keys['shift']&&P.stamina>0,sp=P.speed*(sprint?1.55:1);P.x+=mx/m*sp*dt;P.y+=my/m*sp*dt;P.angle=Math.atan2(my,mx);P.stamina=Math.max(0,P.stamina-(sprint?1.2:.22)*dt)}else P.stamina=Math.min(100,P.stamina+.6*dt);
-collect();
-S.spawn-=dt;if(S.spawn<=0&&S.z.length<70){spawn();S.spawn=Math.max(12,62-S.wave*3-S.day*1.5)}
-for(let i=S.z.length-1;i>=0;i--){let z=S.z[i],dx=P.x-z.x,dy=P.y-z.y,d=Math.hypot(dx,dy)||1,zs=z.speed*(S.night?1.15:1);z.x+=dx/d*zs*dt;z.y+=dy/d*zs*dt;if(d<z.r+P.r){z.hit-=dt;if(z.hit<=0){hurt(z.boss?16:z.elite?10:4+S.day*.4);z.hit=45}}}
-for(let i=S.nades.length-1;i>=0;i--){const n=S.nades[i];n.x+=Math.cos(n.a)*5*dt;n.y+=Math.sin(n.a)*5*dt;n.t-=dt;if(n.t<=0){explode(n.x,n.y);S.nades.splice(i,1)}}
-for(let i=S.b.length-1;i>=0;i--){let b=S.b[i];b.x+=Math.cos(b.a)*8.5*dt;b.y+=Math.sin(b.a)*8.5*dt;b.life-=dt;let gone=b.life<=0;for(let j=S.z.length-1;j>=0&&!gone;j--){let z=S.z[j];if(Math.hypot(z.x-b.x,z.y-b.y)<z.r+5){z.hp-=b.damage;sfx.hit();gone=true;if(z.hp<=0){killZombie(j,z);if(S.kills%12===0){S.wave++;if(S.wave%5===0)spawnBoss();if(S.wave>4){S.wave=1;S.day++;S.night=!S.night;toast(S.night?'🌙 La notte cade... sopravvivi!':'🌅 Giorno '+S.day)}}}}}if(gone)S.b.splice(i,1)}
-for(let i=S.particles.length-1;i>=0;i--){const p=S.particles[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.96;p.vy*=.96;p.life-=dt;if(p.life<=0)S.particles.splice(i,1)}
-if(S.shake>0)S.shake=Math.max(0,S.shake-.9*dt);if(S.hurtFlash>0)S.hurtFlash-=.6*dt;
-hud()}
-function w2s(x,y){return[x-P.x+W/2,y-P.y+H/2]}
-function circle(x,y,r,fill,stroke){let sx,sy;[sx,sy]=w2s(x,y);if(sx<-r||sy<-r||sx>W+r||sy>H+r)return;ctx.beginPath();ctx.arc(sx,sy,r,0,6.283);ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}}
-function draw(){ctx.clearRect(0,0,W,H);ctx.save();if(S.shake>0)ctx.translate((Math.random()-.5)*S.shake,(Math.random()-.5)*S.shake);
-ctx.fillStyle=S.night?'#040b0c':'#071611';ctx.fillRect(-40,-40,W+80,H+80);
-let g=48,ox=((W/2-P.x)%g+g)%g,oy=((H/2-P.y)%g+g)%g;ctx.strokeStyle=S.night?'#10252b':'#123226';ctx.beginPath();for(let x=ox;x<W;x+=g){ctx.moveTo(x,0);ctx.lineTo(x,H)}for(let y=oy;y<H;y+=g){ctx.moveTo(0,y);ctx.lineTo(W,y)}ctx.stroke();
-for(let a=-2;a<=2;a++)for(let b=-2;b<=2;b++){let x=Math.round(P.x/520)*520+a*520,y=Math.round(P.y/520)*520+b*520;circle(x,y,105,'#153d2b','#2b6848');circle(x,y,62,'#1e5039','#397a55')}
-for(const l of S.loot){circle(l.x,l.y,9,l.t==='wood'?'#c78b4d':l.t==='metal'?'#a7bcc5':l.t==='med'?'#e16e7c':'#f4cf65');let sx,sy;[sx,sy]=w2s(l.x,l.y);ctx.font='12px system-ui';ctx.fillStyle='#fff';ctx.fillText(l.t==='wood'?'🪵':l.t==='metal'?'🔩':l.t==='med'?'🧪':'💰',sx-8,sy-13)}
-for(const n of S.nades)circle(n.x,n.y,7,Math.floor(n.t/8)%2?'#ffd36b':'#ff9d5c','#7a4b16');
-for(const b of S.b)circle(b.x,b.y,4,'#ffd36b');
-for(const z of S.z){circle(z.x,z.y,z.r,z.boss?'#8c2f2f':z.elite?'#b65b31':'#8d454e',z.boss?'#ff8c5c':z.elite?'#ffbe65':'#d66a74');if(z.boss){for(let k=0;k<8;k++){const a2=k/8*6.283;circle(z.x+Math.cos(a2)*z.r*.9,z.y+Math.sin(a2)*z.r*.9,4,'#5c1e1e','#ff8c5c')}}let sx,sy;[sx,sy]=w2s(z.x,z.y);ctx.fillStyle='#132016';ctx.fillRect(sx-17,sy-z.r-10,34,4);ctx.fillStyle=z.boss?'#ff8c5c':'#63df88';ctx.fillRect(sx-17,sy-z.r-10,34*Math.max(0,z.hp/z.maxHp),4);ctx.font=z.boss?'20px system-ui':'12px system-ui';ctx.fillText(z.boss?'👹':z.elite?'👑':'',sx-(z.boss?10:6),sy-z.r-14)}
-for(const p of S.particles){ctx.globalAlpha=Math.max(0,Math.min(1,p.life/20));circle(p.x,p.y,p.size,p.color)}ctx.globalAlpha=1;
-let sx,sy;[sx,sy]=w2s(P.x,P.y);ctx.beginPath();ctx.arc(sx,sy,P.r,0,6.283);ctx.fillStyle='#e1f4e7';ctx.fill();ctx.strokeStyle='#6be69b';ctx.stroke();ctx.save();ctx.translate(sx,sy);ctx.rotate(P.angle);ctx.fillStyle='#50f09a';ctx.fillRect(0,-5,25,10);ctx.restore();
-if(S.night){const gr=ctx.createRadialGradient(sx,sy,70,sx,sy,330);gr.addColorStop(0,'rgba(0,5,8,0)');gr.addColorStop(1,'rgba(0,5,8,.86)');ctx.fillStyle=gr;ctx.fillRect(0,0,W,H)}
-ctx.restore();
-if(S.hurtFlash>0){ctx.fillStyle='rgba(255,45,65,'+Math.min(.32,Math.max(0,S.hurtFlash)*.04)+')';ctx.fillRect(0,0,W,H)}}
-/* ---------- PANNELLI ---------- */
-function upgradeBase(){let w=S.base*30,m=S.base*18;if(S.wood>=w&&S.metal>=m){S.wood-=w;S.metal-=m;S.base++;S.maxHp+=30;S.hp=S.maxHp;sfx.level();toast('🏕️ Base potenziata');hud();closeModal()}else toast('Risorse insufficienti')}
-function upgradeWeapon(){let c=S.weapon*55;if(S.metal>=c){S.metal-=c;S.weapon++;S.damage+=14;S.rate=Math.max(125,S.rate-35);sfx.level();toast('🔫 Arma migliorata');hud();closeModal()}else toast('Metallo insufficiente')}
-function bagHtml(){return '<div class="grid"><div class="card">🪵 Legno<br><b>'+S.wood+'</b></div><div class="card">🔩 Metallo<br><b>'+S.metal+'</b></div><div class="card">🧪 Medkit<br><b>'+S.med+'</b></div><div class="card">🩹 Cerotti<br><b>'+S.band+'</b></div><div class="card">💣 Bombe<br><b>'+S.bombs+'</b></div><div class="card">💰 Monete<br><b>'+S.coins+'</b></div></div><div class="grid" style="margin-top:8px"><button onclick="craftBand()">🩹 Crafta cerotto<small> · 4 legno</small></button><button onclick="craftBomb()">💣 Crafta bomba<small> · 10 metallo + 6 legno</small></button></div><div class="grid" style="margin-top:8px"><button onclick="useBand()">Usa cerotto (+25 HP)</button><button onclick="useMed()">Usa medkit (+40 HP)</button></div>'}
-function refreshBag(){if(mtitle.textContent==='🎒 Zaino')mbody.innerHTML=bagHtml()}
-function craftBand(){if(S.wood>=4){S.wood-=4;S.band++;sfx.pickup();toast('🩹 Cerotto craftato');hud();refreshBag()}else toast('Serve 4 legno')}
-function craftBomb(){if(S.metal>=10&&S.wood>=6){S.metal-=10;S.wood-=6;S.bombs++;sfx.pickup();toast('💣 Bomba craftata');hud();refreshBag()}else toast('Servono 10 metallo + 6 legno')}
-function useBand(){if(S.band>0&&S.hp<S.maxHp){S.band--;S.hp=Math.min(S.maxHp,S.hp+25);sfx.pickup();hud();refreshBag()}else toast('Nessun cerotto o vita piena')}
-function useMed(){if(S.med>0&&S.hp<S.maxHp){S.med--;S.hp=Math.min(S.maxHp,S.hp+40);sfx.pickup();hud();refreshBag()}else toast('Nessun medkit o vita piena')}
-$('mapBtn').onclick=()=>modal('🗺️ Mappa','<p>Sei nel settore <b>'+Math.floor(P.x/520)+', '+Math.floor(P.y/520)+'</b>.</p><p>Le radure verdi sono zone da esplorare: il mondo si genera mentre ti muovi.</p><div class="card">🎯 Sopravvivi, raccogli, crafta e potenzia la base. Ogni 5 ondate a
+const c=document.getElementById('game'),x=c.getContext('2d'),img=new Image();img.src='./assets/map-hq.png';
+img.onerror=()=>{img.failed=true;toast('Asset grafico non disponibile: controllo cartella assets')};let W=0,H=0,started=false,keys={},joy={x:0,y:0,active:false},tank={x:.5,y:.72,hp:4800,max:4800,angle:0},shots=[],enemies=[],last=performance.now(),kills=142;
+function resize(){W=innerWidth;H=innerHeight;c.width=W*devicePixelRatio;c.height=H*devicePixelRatio;x.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}addEventListener('resize',resize);resize();
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.style.opacity=1;setTimeout(()=>e.style.opacity=0,1600)}
+function draw(){x.clearRect(0,0,W,H);if(img.complete && img.naturalWidth>0 && !img.failed){const iw=img.naturalWidth,ih=img.naturalHeight,scale=Math.max(W/iw,H/ih);const dw=iw*scale,dh=ih*scale;x.drawImage(img,(W-dw)/2,(H-dh)/2,dw,dh)}else{x.fillStyle='#132b24';x.fillRect(0,0,W,H)}
+// subtle playable overlay: target markers and tank movement
+for(const e of enemies){x.beginPath();x.arc(e.x*W,e.y*H,7,0,Math.PI*2);x.fillStyle='#ff4f58';x.fill();x.strokeStyle='#ffb15c';x.stroke();x.fillStyle='#101820';x.fillRect(e.x*W-12,e.y*H-16,24,3);x.fillStyle='#75ef8c';x.fillRect(e.x*W-12,e.y*H-16,24*e.hp,3)}
+x.save();x.translate(tank.x*W,tank.y*H);x.rotate(tank.angle);x.fillStyle='#182b24';x.strokeStyle='#b8d7b4';x.lineWidth=2;x.beginPath();x.roundRect(-28,-17,56,34,8);x.fill();x.stroke();x.fillStyle='#4e7350';x.fillRect(-20,-23,40,46);x.fillStyle='#273d2f';x.beginPath();x.arc(0,0,14,0,Math.PI*2);x.fill();x.fillStyle='#a5c18c';x.fillRect(8,-3,34,6);x.restore();for(const s of shots){x.beginPath();x.arc(s.x*W,s.y*H,4,0,Math.PI*2);x.fillStyle='#ffd36a';x.fill()}x.fillStyle='#ffffffaa';x.font='11px system-ui';x.fillText('TANK COMMAND ONLINE',12,H-8)}
+function spawn(){enemies.push({x:.75+Math.random()*.18,y:.55+Math.random()*.3,hp:1})}
+function fire(){if(!started)return;shots.push({x:tank.x,y:tank.y,tx:.78,ty:.72,life:1});if(Math.random()<.7)spawn();kills++;document.getElementById('zprog').textContent=Math.min(200,kills)+'/200';toast('Fuoco del M1A2!')}
+function update(dt){if(!started)return;let sx=joy.x,sy=joy.y;if(keys.w||keys.arrowup)sy-=1;if(keys.s||keys.arrowdown)sy+=1;if(keys.a||keys.arrowleft)sx-=1;if(keys.d||keys.arrowright)sx+=1;const m=Math.hypot(sx,sy)||1;if(Math.abs(sx)+Math.abs(sy)>0){tank.x=Math.max(.08,Math.min(.92,tank.x+sx/m*dt*.12));tank.y=Math.max(.2,Math.min(.92,tank.y+sy/m*dt*.12));tank.angle=Math.atan2(sy,sx)}for(let i=shots.length-1;i>=0;i--){const s=shots[i];s.x+=(s.tx-s.x)*dt*5;s.y+=(s.ty-s.y)*dt*5;s.life-=dt*2;if(s.life<=0)shots.splice(i,1)}for(const e of enemies){e.x-=dt*.025;e.y+=dt*.01}enemies=enemies.filter(e=>e.x>-.1)}
+function loop(t){const dt=Math.min(.04,(t-last)/1000);last=t;update(dt);draw();requestAnimationFrame(loop)}requestAnimationFrame(loop);
+$('startBtn').onclick=()=>{started=true;$('start').style.display='none';toast('Comando avviato')};$('fire').onclick=fire;$('attackBtn').onclick=fire;$('bomb').onclick=()=>toast('Bomba tattica pronta');$('med').onclick=()=>toast('Kit medico utilizzato');$('grenade').onclick=()=>toast('Munizioni speciali equipaggiate');
+addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=1;if(e.key===' ')fire()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=0);
+const joyEl=$('joy');function moveJoy(e){const r=joyEl.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),max=r.width*.34,m=Math.hypot(dx,dy)||1;joy.x=Math.max(-1,Math.min(1,dx/max));joy.y=Math.max(-1,Math.min(1,dy/max));if(m>max){joy.x=dx/m;joy.y=dy/m}}
+joyEl.onpointerdown=e=>{joy.active=true;joyEl.setPointerCapture(e.pointerId);moveJoy(e)};joyEl.onpointermove=e=>{if(joy.active)moveJoy(e)};joyEl.onpointerup=()=>{joy.active=false;joy.x=joy.y=0};
+</script></body></html>
